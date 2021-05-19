@@ -29,11 +29,29 @@ jobRoleInput.addEventListener('change', (e) => {
 
 jobRoleOther.style.display = 'none';
 
+/*
+ensures color selection is associated with the proper theme
+*/
+const shirtDesign = document.getElementById("design");
+const colorInput = document.getElementById("color");
+const colors = color.children;
+colorInput.disabled = true;  //found disabled snipet at https://www.qodo.co.uk/blog/javascript-enabling-and-disabling-form-field-elements/ 
 
+shirtDesign.addEventListener('change', (e) => {
+  const selectedTheme = e.target; 
+  colorInput.disabled = false;
 
-
-
-
+  for (let i = 0; i < colors.length; i++ ) {
+      let shirtTheme = colors[i].getAttribute('data-theme');
+  
+      if (selectedTheme.value === shirtTheme) {
+          colors[i].hidden = false;  
+      }
+      if (selectedTheme.value !== shirtTheme) {
+        colors[i].hidden = true;  
+      }
+   }
+});
 
 
 
