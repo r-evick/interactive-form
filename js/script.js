@@ -5,12 +5,14 @@ Code by: Ryan Evick
 */
 
 document.addEventListener('DOMContentLoaded', () => {  //allows JS to run no matter where it's placed in HTML
+  
     
 /*
 puts focus state on name field upon page load
 */
 const nameInput = document.getElementById("name");
 nameInput.focus();
+
 
 /*
 hide other job role field unless selected
@@ -20,6 +22,7 @@ const jobRoleInput = document.getElementById("title");
 
 jobRoleInput.addEventListener('change', (e) => {
   const selectedJob = e.target.value;
+  
   if (selectedJob === 'other') {
       jobRoleOther.style.display = 'block';
   } else {
@@ -29,13 +32,14 @@ jobRoleInput.addEventListener('change', (e) => {
 
 jobRoleOther.style.display = 'none';
 
+
 /*
 ensures color selection is associated with the proper theme
 */
 const shirtDesign = document.getElementById("design");
 const colorInput = document.getElementById("color");
 const colors = color.children;
-colorInput.disabled = true;  //found disabled snipet at https://www.qodo.co.uk/blog/javascript-enabling-and-disabling-form-field-elements/ 
+colorInput.disabled = true;  //found disable snipet at https://www.qodo.co.uk/blog/javascript-enabling-and-disabling-form-field-elements/ 
 
 shirtDesign.addEventListener('change', (e) => {
   const selectedTheme = e.target; 
@@ -52,6 +56,33 @@ shirtDesign.addEventListener('change', (e) => {
       }
    }
 });
+
+
+/*
+updates total cost to be sum of items selected
+*/
+const activities = document.getElementById("activities");
+let cost = document.getElementById('activities-cost');
+let totalCost = 0; //starting cost is $0 until an activity is selected
+
+activities.addEventListener('change', (e) => {
+    const checkbox = e.target; 
+    const activityCost = e.target.getAttribute('data-cost'); 
+    
+    if (checkbox.checked) {
+        totalCost += +activityCost;   
+    } else {
+        totalCost -= +activityCost;
+    }
+    
+    cost.innerHTML = `Total: $${totalCost}`
+});
+
+
+
+
+
+
 
 
 
