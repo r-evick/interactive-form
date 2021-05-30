@@ -68,7 +68,7 @@ let totalCost = 0; //starting cost is $0 until an activity is selected
 activities.addEventListener('change', (e) => {
     const checkbox = e.target; 
     const activityCost = e.target.getAttribute('data-cost'); 
-    
+
     if (checkbox.checked) {
         totalCost += +activityCost;   
     } else {
@@ -110,6 +110,135 @@ payment.addEventListener('change', (e) => {
         bitcoin.hidden = false;
     }
 });
+
+/*
+form validation, checks if the required information is valid
+*/
+
+//helper functions check for validation
+const nameValidator = () => {
+    const nameIsValid = /^[a-zA-Z]+ ?[a-zA-Z]*? ?[a-zA-Z]*?$/.test(nameInput.value);
+    
+    return nameIsValid;
+}
+
+const email = document.getElementById('email'); 
+const emailValidator = () => {
+    const emailIsValid = /^[^@]+@[^@.]+\.[a-z]+$/i.test(email.value);
+    
+    return emailIsValid;
+}
+
+const registerValidator = () => {
+    const registerIsValid = totalCost > 0;
+    
+    return registerIsValid;
+}
+
+const creditCardValidator = () => {
+    const creditCardIsValid = /^[0-9]{13,16}$/g.test(creditCardNumber.value);
+    
+    return creditCardIsValid;
+}
+const zipCodeValidator = () => {
+    const zipCodeIsValid = /^\d{5}$/.test(zipCode.value);
+    
+    return zipCodeIsValid;
+}
+const cvvValidator = () => {
+    const cvvIsValid = /^\d{3}$/.test(cvv.value);
+    
+    return cvvIsValid;
+}
+
+
+//adds or removes 'valid' and 'not-valid' class name for error notifications
+function invalid(e) {
+    const parentElement = e.parentElement;
+    
+    parentElement.classList.add('not-valid');
+    parentElement.classList.remove('valid');
+    parentElement.lastElementChild.style.display = 'block';
+}
+function valid(e) {
+    const parentElement = e.parentElement;
+    
+    parentElement.classList.add('valid');
+    parentElement.classList.remove('not-valid');
+    parentElement.lastElementChild.style.display = 'none';
+}
+
+/*
+checks that all required info is valid on form submit
+*/
+
+const form = document.querySelector('form');
+const nameHint = document.getElementById('name-hint');
+const emailHint = document.getElementById('email-hint');
+const activitiesHint = document.getElementById('activities-hint');
+const creditCardNumber = document.getElementById('cc-num');
+const zipCode = document.getElementById('zip');
+const cvv = document.getElementById('cvv');
+
+form.addEventListener('submit', (e) => {
+
+    if (!nameValidator()) {
+        if (nameInput.value.length > 0) {
+            nameHint.innerHTML = `Sorry, came can't contain numbers or special characters`;
+        } else if (nameInput.value.length === 0) {
+            nameHint.innerHTML = `Sorry, name field can't be left blank`;
+        }
+        invalid(nameInput);
+        e.preventDefault();
+    } else {
+        valid(nameInput);
+    }
+    
+    if (!emailValidator()) {
+        invalid(email);
+        emailHint.innerHTML = `
+        Email address must be formatted correctly.<br>
+        Example: <i>name@email.com</i>
+        `;
+        e.preventDefault();
+    } else {
+        valid(email);
+    }
+    
+    if (!registerValidator()) {
+        invalid(activitiesHint);
+        activitiesHint.style.display = 'block';
+        activitiesHint.innerHTML = 'Please choose at least one activity from above';
+        e.preventDefault();
+    } else {
+        valid(activitiesHint);
+    }
+
+    if (!creditCardValidator()) {
+        invalid(creditCardNumber);
+        e.preventDefault();
+    } else {
+        valid(creditCardNumber);
+    }
+
+    if (!zipCodeValidator()) {
+        invalid(zipCode);
+        e.preventDefault();
+    } else {
+        valid(zipCode);
+    }
+
+    if (!cvvValidator()) {
+        invalid(cvv);
+        e.preventDefault();
+    } else {
+        valid(cvv);
+    }
+});
+
+
+
+
 
 
 
