@@ -34,8 +34,9 @@ jobRoleOther.style.display = 'none';
 
 
 /*
-ensures color selection is associated with the proper theme
+ensures correct color selection is associated with the proper themed shirt
 */
+
 const shirtDesign = document.getElementById('design');
 const colorInput = document.getElementById('color');
 const colors = color.children;
@@ -59,8 +60,9 @@ shirtDesign.addEventListener('change', (e) => {
 
 
 /*
-updates total cost to be sum of items selected
+updates total cost to be sum of all the items selected
 */
+
 const activities = document.getElementById('activities');
 let cost = document.getElementById('activities-cost');
 let totalCost = 0; //starting cost is $0 until an activity is selected
@@ -75,7 +77,7 @@ activities.addEventListener('change', (e) => {
         totalCost -= +activityCost;
     }
     
-    cost.innerHTML = `Total: $${totalCost}`
+    cost.innerHTML = `Total: $${totalCost}`;
 });
 
 
@@ -83,6 +85,7 @@ activities.addEventListener('change', (e) => {
 credit card set as default payment in payment info section,
 and payment method chosen is only one visible in UI
 */
+
 const payment = document.getElementById('payment');
 const creditCard = document.getElementById('credit-card');
 const paypal = document.getElementById('paypal');
@@ -111,11 +114,12 @@ payment.addEventListener('change', (e) => {
     }
 });
 
+
 /*
 form validation, checks if the required information is valid
 */
 
-//helper functions check for validation
+//helper functions use regex to check for validation
 const nameValidator = () => {
     const nameIsValid = /^[a-zA-Z]+ ?[a-zA-Z]*? ?[a-zA-Z]*?$/.test(nameInput.value);
     
@@ -168,8 +172,9 @@ function valid(e) {
     parentElement.lastElementChild.style.display = 'none';
 }
 
+
 /*
-checks that all required info is valid on form submit
+checks thats all required info is valid on form submit
 */
 
 const form = document.querySelector('form');
@@ -237,10 +242,118 @@ form.addEventListener('submit', (e) => {
 });
 
 
+/*
+real-time error messaging if info is invalid
+*/
 
+nameInput.addEventListener('keyup', (e) => {
+    
+    if (!nameValidator()) {
+            if (nameInput.value.length > 0) {
+                nameHint.innerHTML = `Sorry, name can't contain numbers or special characters`;
+            } else if (nameInput.value.length === 0) {
+                nameHint.innerHTML = `Sorry, name field can't be left blank`;
+            }
+            invalid(nameInput);
+            e.preventDefault();
+        } else {
+            valid(nameInput);
+        }
+    });    
+    
+email.addEventListener('keyup', (e) => {
+    
+    if (!emailValidator()) {
+        invalid(email);
+        emailHint.innerHTML = `
+        Email address must be formatted correctly.<br>
+        Example: <i>name@email.com</i>
+        `;
+        e.preventDefault();
+    } else {
+        valid(email);
+    }
+});
+ 
 
+//event handler that disables conflicting time for selected activities & error message if none selected
+activities.addEventListener('change', (e) => {
 
+    const selectedCheckbox = e.target;
+    const dateAndTime = e.target.getAttribute('data-day-and-time');
+    
+    for (let i = 0; i < checkbox.length; i++) {
+        
+        const activityCheckbox = checkbox[i].getAttribute('data-day-and-time');
+        
+        if (activityCheckbox === dateAndTime && checkbox[i] !== selectedCheckbox) {
+            if (selectedCheckbox.checked) {
+                checkbox[i].disabled = true;
+                checkbox[i].parentElement.style.backgroundColor = 'pink';
+            } else {
+                checkbox[i].disabled = false;
+                checkbox[i].parentElement.style.backgroundColor = '';
+            }
+        }
+    }
+   
+    if (!registerValidator()) {
+        invalid(activitiesHint);
+        activitiesHint.style.display = 'block';
+        activitiesHint.innerHTML = 'Please choose at least one activity from above';
+        e.preventDefault();
+    } else {
+        valid(activitiesHint);
+    }
+});
+    
+creditCardNumber.addEventListener('keyup', (e) => {
+    
+    if (!creditCardValidator()) {
+        invalid (creditCardNumber);
+        e.preventDefault();
+    } else {
+        valid(creditCardNumber);
+    }
+});
+    
+zipCode.addEventListener('keyup', (e) => {
+    
+    if (!zipCodeValidator()) {
+        invalid(zipCode);
+        e.preventDefault();
+    } else {
+        valid(zipCode);
+    }
+});
+    
+cvv.addEventListener('keyup', (e) => {
+    
+    if (!cvvValidator()) {
+        invalid(cvv);
+        e.preventDefault();
+    } else {
+        valid(cvv);
+    }
+});
+    
 
+/*
+adds/removes focus while tabbing through activities
+*/
 
+const checkbox = document.querySelectorAll("input[type=checkbox]");
+
+for (let i = 0; i < checkbox.length; i++) {
+    checkbox[i].addEventListener('focus', (e) => {
+        e.target.parentElement.classList.add('focus');
+    });
+    checkbox[i].addEventListener('blur', () => {
+        const active = document.querySelector('.focus');
+        if (active) {
+            active.classList.remove('focus');
+        } 
+    });
+};
 
 });   
