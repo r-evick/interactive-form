@@ -53,7 +53,8 @@ shirtDesign.addEventListener('change', (e) => {
           colors[i].hidden = false;  
       }
       if (selectedTheme.value !== shirtTheme) {
-        colors[i].hidden = true;  
+        colors[i].hidden = true;
+        colors[i].selected = false;  
       }
    }
 });
@@ -219,25 +220,27 @@ form.addEventListener('submit', (e) => {
         valid(activitiesHint);
     }
 
-    if (!creditCardValidator()) {
-        invalid(creditCardNumber);
-        e.preventDefault();
-    } else {
-        valid(creditCardNumber);
-    }
+    if (payment.value === 'credit card') {
+        if (!creditCardValidator()) {
+            invalid(creditCardNumber);
+            e.preventDefault();
+        } else {
+            valid(creditCardNumber);
+        }
 
-    if (!zipCodeValidator()) {
-        invalid(zipCode);
-        e.preventDefault();
-    } else {
-        valid(zipCode);
-    }
+        if (!zipCodeValidator()) {
+            invalid(zipCode);
+            e.preventDefault();
+        } else {
+            valid(zipCode);
+        }
 
-    if (!cvvValidator()) {
-        invalid(cvv);
-        e.preventDefault();
-    } else {
-        valid(cvv);
+        if (!cvvValidator()) {
+            invalid(cvv);
+            e.preventDefault();
+        } else {
+            valid(cvv);
+        }
     }
 });
 
