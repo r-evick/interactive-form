@@ -27,10 +27,11 @@ the name, email, credit card number, zip code, and ccv fields
 # Conditional error message
 
 <!--  
-if left blank, the name field will give an error message to the user
- notifying them that it cannot be left blank.
-if the user tries typing anything besides a letter into the name field, a different 
- error message will display notifying them that numbers and special characters
- cannot be used.
+if left blank, the email field will give an error message to the user
+ notifying them that it cannot be left blank
+if the user's entered email address is an invalid format (such as
+ not containing an @ symbol), the field will show an error message 
+ explaining such 
 -->
 
+ 

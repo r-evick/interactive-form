@@ -50,11 +50,13 @@ shirtDesign.addEventListener('change', (e) => {
       let shirtTheme = colors[i].getAttribute('data-theme');
   
       if (selectedTheme.value === shirtTheme) {
-          colors[i].hidden = false;  
+          colors[i].hidden = false; 
+          colorInput.firstElementChild.innerHTML = `Select a color`; 
       }
       if (selectedTheme.value !== shirtTheme) {
         colors[i].hidden = true;
-        colors[i].selected = false;  
+        colors[i].selected = false;
+        colorInput.firstElementChild.innerHTML = `Select a color`; 
       }
    }
 });
@@ -122,7 +124,7 @@ form validation, checks if the required information is valid
 
 //helper functions use regex to check for validation
 const nameValidator = () => {
-    const nameIsValid = /^[a-zA-Z]+ ?[a-zA-Z]*? ?[a-zA-Z]*?$/.test(nameInput.value);
+    const nameIsValid = /[a-zA-Z0-9`~!@#$%^&*()_+{};':",.<>]/.test(nameInput.value);
     
     return nameIsValid;
 }
@@ -189,9 +191,7 @@ const cvv = document.getElementById('cvv');
 form.addEventListener('submit', (e) => {
 
     if (!nameValidator()) {
-        if (nameInput.value.length > 0) {
-            nameHint.innerHTML = `Sorry, came can't contain numbers or special characters`;
-        } else if (nameInput.value.length === 0) {
+        if (nameInput.value.length === 0) {
             nameHint.innerHTML = `Sorry, name field can't be left blank`;
         }
         invalid(nameInput);
@@ -200,13 +200,17 @@ form.addEventListener('submit', (e) => {
         valid(nameInput);
     }
     
-    if (!emailValidator()) {
-        invalid(email);
-        emailHint.innerHTML = `
-        Email address must be formatted correctly.<br>
-        Example: <i>name@email.com</i>
-        `;
-        e.preventDefault();
+    if (!emailValidator()) { 
+        if (email.value.length === 0) {
+            emailHint.innerHTML = `Sorry, email field can't be left blank`;
+        } else if (email.value.length > 0) {
+            emailHint.innerHTML = `
+            Email address must be formatted correctly.<br>
+            Example: <i>name@email.com</i>
+            `;
+        }    
+            invalid(email);
+            e.preventDefault();
     } else {
         valid(email);
     }
@@ -220,7 +224,7 @@ form.addEventListener('submit', (e) => {
         valid(activitiesHint);
     }
 
-    if (payment.value === 'credit card') {
+    if (payment.value === 'credit-card') {
         if (!creditCardValidator()) {
             invalid(creditCardNumber);
             e.preventDefault();
@@ -252,9 +256,7 @@ real-time error messaging if info is invalid
 nameInput.addEventListener('keyup', (e) => {
     
     if (!nameValidator()) {
-            if (nameInput.value.length > 0) {
-                nameHint.innerHTML = `Sorry, name can't contain numbers or special characters`;
-            } else if (nameInput.value.length === 0) {
+            if (nameInput.value.length === 0) {
                 nameHint.innerHTML = `Sorry, name field can't be left blank`;
             }
             invalid(nameInput);
@@ -267,12 +269,16 @@ nameInput.addEventListener('keyup', (e) => {
 email.addEventListener('keyup', (e) => {
     
     if (!emailValidator()) {
-        invalid(email);
-        emailHint.innerHTML = `
-        Email address must be formatted correctly.<br>
-        Example: <i>name@email.com</i>
-        `;
-        e.preventDefault();
+        if (email.value.length === 0) {
+            emailHint.innerHTML = `Sorry, email field can't be left blank`;
+        } else if (email.value.length > 0) {
+            emailHint.innerHTML = `
+            Email address must be formatted correctly.<br>
+            Example: <i>name@email.com</i>
+            `;
+        }    
+            invalid(email);
+            e.preventDefault();
     } else {
         valid(email);
     }
